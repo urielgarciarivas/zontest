@@ -1,0 +1,3 @@
+[submodule "deps/zonterm"]
+	path = deps/zonterm
+	url = https://github.com/zoningorg/zonterm.git

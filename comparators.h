@@ -19,7 +19,6 @@
 #ifndef __ZNG_COMPARATORS_H__
 #define __ZNG_COMPARATORS_H__
 
-#include "deps/zonterm/outputstream.h"
 #include "results.h"
 
 #define EXPECT_EQUAL(lhs, rhs)  \

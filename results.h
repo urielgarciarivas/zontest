@@ -35,9 +35,12 @@ static const char* __CURRENT_TEST() { return __CURRENT_TEST_; }
 
 #endif // __cplusplus
 
+static int zng_test_result = 0;
+
 # define START_TEST(str)   \
 do {                       \
   __CURRENT_TEST_ = (str); \
+  int __zng_test_result = 0;     \
 } while (0)
 
 #define FINISH_TEST()                                \
@@ -50,10 +53,13 @@ do {                                               \
   STDERR_RED("[%s]: Failed.\n", __CURRENT_TEST()); \
 } while (0)
 
-#define FAIL(string)                                    \
-do {                                                    \
-  STDERR_RED("[%s]: %s\n", __CURRENT_TEST(), (string)); \
-  FINISH_TEST_FAILED();                                 \
+#define FAIL(str)                                    \
+do {                                                 \
+  STDERR_RED("[%s]: %s\n", __CURRENT_TEST(), (str)); \
+  FINISH_TEST_FAILED();                              \
+  zng_test_result = 1;                               \
 } while (0)
+
+#define TEST_RESULT() __zng_test_result
 
 #endif // __ZNG_RESULTS_H__

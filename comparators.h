@@ -21,31 +21,31 @@
 
 #include "results.h"
 
-#define EXPECT_EQUAL(lhs, rhs)  \
-do {                            \
-  if ((lhs) != (rhs)) {         \
-    FAIL("Arguments '"          \
-         #lhs                   \
-         "' and '"              \
-         #rhs                   \
-         "' should be equal."); \
-  }                             \
+#define EXPECT_EQUAL(__ZNG_LHS, __ZNG_RHS) \
+do {                                       \
+  if ((__ZNG_LHS) != (__ZNG_RHS)) {        \
+    FAIL("Arguments '"                     \
+         #__ZNG_LHS                        \
+         "' and '"                         \
+         #__ZNG_RHS                        \
+         "' should be equal.");            \
+  }                                        \
 } while (0)
 
-#define EXPECT_TRUE(expression)                               \
+#define EXPECT_TRUE(__ZNG_EXPRESSION)                         \
 do {                                                          \
-  if (!(expression)) {                                        \
+  if (!(__ZNG_EXPRESSION)) {                                  \
     FAIL("The following boolean expression should be true: '" \
-         #expression                                          \
+         #__ZNG_EXPRESSION                                    \
          "'.");                                               \
   }                                                           \
 } while (0)
 
-#define EXPECT_FALSE(expression)                               \
+#define EXPECT_FALSE(__ZNG_EXPRESSION)                         \
 do {                                                           \
-  if ((expression)) {                                          \
+  if ((__ZNG_EXPRESSION)) {                                    \
     FAIL("The following boolean expression should be false: '" \
-         #expression                                           \
+         #__ZNG_EXPRESSION                                     \
          "'.");                                                \
   }                                                            \
 } while (0)

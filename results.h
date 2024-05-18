@@ -25,41 +25,40 @@
 
 #include <string>
 
-static std::string __CURRENT_TEST_;
-static const char* __CURRENT_TEST() { return __CURRENT_TEST_.c_str(); }
+static std::string __zng_current_test_;
+static const char* __zng_current_test() { return __zng_current_test_.c_str(); }
 
 #else
 
-static char* __CURRENT_TEST_;
-static const char* __CURRENT_TEST() { return __CURRENT_TEST_; }
+static char* __zng_current_test_;
+static const char* __zng_current_test() { return __zng_current_test_; }
 
 #endif // __cplusplus
 
-static int zng_test_result = 0;
+static int __zng_test_result_ = 0;
+static int test_result() { return __zng_test_result_; }
 
 # define START_TEST(str)   \
 do {                       \
-  __CURRENT_TEST_ = (str); \
-  int __zng_test_result = 0;     \
+  __zng_current_test_ = (str); \
+  __zng_test_result_ = 0;     \
 } while (0)
 
 #define FINISH_TEST()                                \
 do {                                                 \
-  STDOUT_GREEN("[%s]: Passed.\n", __CURRENT_TEST()); \
+  STDOUT_GREEN("[%s]: Passed.\n", __zng_current_test()); \
 } while (0)
 
 #define FINISH_TEST_FAILED()                       \
 do {                                               \
-  STDERR_RED("[%s]: Failed.\n", __CURRENT_TEST()); \
+  STDERR_RED("[%s]: Failed.\n", __zng_current_test()); \
 } while (0)
 
 #define FAIL(str)                                    \
 do {                                                 \
-  STDERR_RED("[%s]: %s\n", __CURRENT_TEST(), (str)); \
+  STDERR_RED("[%s]: %s\n", __zng_current_test(), (str)); \
   FINISH_TEST_FAILED();                              \
-  zng_test_result = 1;                               \
+  __zng_test_result_ = 1;                               \
 } while (0)
-
-#define TEST_RESULT() __zng_test_result
 
 #endif // __ZNG_RESULTS_H__

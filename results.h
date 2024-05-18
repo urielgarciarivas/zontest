@@ -38,10 +38,10 @@ static const char* __zng_current_test() { return __zng_current_test_; }
 static int __zng_test_result_ = 0;
 static int test_result() { return __zng_test_result_; }
 
-# define START_TEST(str)       \
-do {                           \
-  __zng_current_test_ = (str); \
-  __zng_test_result_ = 0;      \
+# define START_TEST(__ZNG_TEST_NAME)       \
+do {                                       \
+  __zng_current_test_ = (__ZNG_TEST_NAME); \
+  __zng_test_result_ = 0;                  \
 } while (0)
 
 #define FINISH_TEST()                                      \
@@ -56,11 +56,11 @@ do {                                                   \
   STDERR_RED("[%s]: Failed.\n", __zng_current_test()); \
 } while (0)
 
-#define FAIL(str)                                        \
-do {                                                     \
-  STDERR_RED("[%s]: %s\n", __zng_current_test(), (str)); \
-  FINISH_TEST_FAILED();                                  \
-  __zng_test_result_ = 1;                                \
+#define FAIL(__ZNG_FAIL_MESSAGE)                                        \
+do {                                                                    \
+  STDERR_RED("[%s]: %s\n", __zng_current_test(), (__ZNG_FAIL_MESSAGE)); \
+  FINISH_TEST_FAILED();                                                 \
+  __zng_test_result_ = 1;                                               \
 } while (0)
 
 #endif // __ZNG_RESULTS_H__

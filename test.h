@@ -58,9 +58,9 @@ do {                                                            \
     __zng_function_array[i]();                                  \
     if (!__zng_keep_testing) {                                  \
       STDERR_RED("["                                            \
-      #__ZNG_FILENAME                                           \
-      "][%s][%s]: Failed.\n",                                   \
-          __zng_section_names[i], __zng_test_names[i]);         \
+                 #__ZNG_FILENAME                                \
+                 "][%s][%s]: Failed.\n",                        \
+                 __zng_section_names[i], __zng_test_names[i]);  \
       break;                                                    \
     }                                                           \
   }                                                             \

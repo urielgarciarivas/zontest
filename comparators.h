@@ -32,6 +32,17 @@ do {                                       \
   }                                        \
 } while (0)
 
+#define EXPECT_DIFFERENT(__ZNG_LHS, __ZNG_RHS) \
+do {                                           \
+  if ((__ZNG_LHS) == (__ZNG_RHS)) {            \
+    FAIL("Arguments '"                         \
+         #__ZNG_LHS                            \
+         "' and '"                             \
+         #__ZNG_RHS                            \
+         "' should be different.");            \
+  }                                            \
+} while (0)
+
 #define EXPECT_TRUE(__ZNG_EXPRESSION)                         \
 do {                                                          \
   if (!(__ZNG_EXPRESSION)) {                                  \

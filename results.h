@@ -19,6 +19,8 @@
 #ifndef __ZNG_RESULTS_H__
 #define __ZNG_RESULTS_H__
 
+#include <stdbool.h>
+
 #include "deps/zonterm/outputstream.h"
 
 static bool __zng_keep_testing = true;

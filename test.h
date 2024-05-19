@@ -28,11 +28,11 @@ static char** __zng_section_names = NULL;
 static char** __zng_test_names = NULL;
 static int __zng_function_array_size = 0;
 
-#define TEST(NameOfTheTestSection, name_of_the_specific_test)                  \
-  static void test_##NameOfTheTestSection##_##name_of_the_specific_test();     \
+#define TEST(__ZNG_SECTION, __ZNG_TEST)                                        \
+  static void test_##__ZNG_SECTION##_##__ZNG_TEST();                           \
   __attribute__((constructor))                                                 \
   static void                                                                  \
-  test_##NameOfTheTestSection##_##name_of_the_specific_test##_initialize() {   \
+  test_##__ZNG_SECTION##_##__ZNG_TEST##_initialize() {                         \
     __zng_function_array_size++;                                               \
     __zng_function_array =                                                     \
         (void (**)()) realloc(__zng_function_array,                            \
@@ -44,39 +44,45 @@ static int __zng_function_array_size = 0;
         (char **) realloc(__zng_test_names,                                    \
                           __zng_function_array_size * sizeof(char *));         \
     __zng_function_array[__zng_function_array_size - 1] =                      \
-        test_##NameOfTheTestSection##_##name_of_the_specific_test;             \
+        test_##__ZNG_SECTION##_##__ZNG_TEST;                                   \
     __zng_section_names[__zng_function_array_size - 1] =                       \
-        #NameOfTheTestSection;                                                 \
+        #__ZNG_SECTION;                                                        \
     __zng_test_names[__zng_function_array_size - 1] =                          \
-        #name_of_the_specific_test;                                            \
+        #__ZNG_TEST;                                                           \
   }                                                                            \
-  static void test_##NameOfTheTestSection##_##name_of_the_specific_test()
+  static void test_##__ZNG_SECTION##_##__ZNG_TEST()
 
-#define RUN_TESTS()                                     \
-do {                                                    \
-  for (int i = 0; i < __zng_function_array_size; i++) { \
-    __zng_function_array[i]();                          \
-    if (__zng_keep_testing) {                           \
-      STDOUT_GREEN("  [%s][%s]: Passed.\n",             \
-          __zng_section_names[i], __zng_test_names[i])  \
-    } else {                                            \
-      STDERR_RED("  [%s][%s]: Failed.\n",               \
-          __zng_section_names[i], __zng_test_names[i]); \
-      break;                                            \
-    }                                                   \
-  }                                                     \
-  if (__zng_function_array != NULL) {                   \
-    free(__zng_function_array);                         \
-    __zng_function_array = NULL;                        \
-  }                                                     \
-  if (__zng_section_names != NULL) {                    \
-    free(__zng_section_names);                          \
-    __zng_section_names = NULL;                         \
-  }                                                     \
-  if (__zng_test_names != NULL) {                       \
-    free(__zng_test_names);                             \
-    __zng_test_names = NULL;                            \
-  }                                                     \
+#define RUN_TESTS(__ZNG_FILENAME)                               \
+do {                                                            \
+  for (int i = 0; i < __zng_function_array_size; i++) {         \
+    __zng_function_array[i]();                                  \
+    if (!__zng_keep_testing) {                                  \
+      STDERR_RED("["                                            \
+      #__ZNG_FILENAME                                           \
+      "][%s][%s]: Failed.\n",                                   \
+          __zng_section_names[i], __zng_test_names[i]);         \
+      break;                                                    \
+    }                                                           \
+  }                                                             \
+  if (__zng_keep_testing) {                                     \
+      STDOUT_GREEN("["                                          \
+                   #__ZNG_FILENAME                              \
+                   "]: %d test%s passed.\n",                    \
+                   __zng_function_array_size,                   \
+                  (__zng_function_array_size == 1 ? "" : "s")); \
+  }                                                             \
+  if (__zng_function_array != NULL) {                           \
+    free(__zng_function_array);                                 \
+    __zng_function_array = NULL;                                \
+  }                                                             \
+  if (__zng_section_names != NULL) {                            \
+    free(__zng_section_names);                                  \
+    __zng_section_names = NULL;                                 \
+  }                                                             \
+  if (__zng_test_names != NULL) {                               \
+    free(__zng_test_names);                                     \
+    __zng_test_names = NULL;                                    \
+  }                                                             \
 } while (0)
 
 #endif // __ZNG_TEST_H__

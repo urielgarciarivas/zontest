@@ -71,6 +71,11 @@ do {                                                            \
                    __zng_function_array_size,                   \
                   (__zng_function_array_size == 1 ? "" : "s")); \
   }                                                             \
+  /* There is no need to deallocate each individual element */  \
+  /* in the following arrays. Function pointers are static */   \
+  /* and do not require deallocation. The string arrays */      \
+  /* store string literals only which do not require */         \
+  /* deallocation either. */                                    \
   if (__zng_function_array != NULL) {                           \
     free(__zng_function_array);                                 \
     __zng_function_array = NULL;                                \

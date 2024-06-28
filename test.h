@@ -23,25 +23,26 @@
 
 #include "comparators.h"
 
-static void (**__zng_function_array)() = NULL;
-static char** __zng_section_names = NULL;
-static char** __zng_test_names = NULL;
-static int __zng_function_array_size = 0;
+static void (**__zng_function_array)(void) = NULL;
+static const char** __zng_section_names = NULL;
+static const char** __zng_test_names = NULL;
+static size_t __zng_function_array_size = 0;
 
 #define TEST(__ZNG_SECTION, __ZNG_TEST)                                        \
-  static void test_##__ZNG_SECTION##_##__ZNG_TEST();                           \
+  static void test_##__ZNG_SECTION##_##__ZNG_TEST(void);                       \
   __attribute__((constructor))                                                 \
   static void                                                                  \
-  test_##__ZNG_SECTION##_##__ZNG_TEST##_initialize() {                         \
+  test_##__ZNG_SECTION##_##__ZNG_TEST##_initialize(void) {                     \
     __zng_function_array_size++;                                               \
     __zng_function_array =                                                     \
-        (void (**)()) realloc(__zng_function_array,                            \
-                              __zng_function_array_size * sizeof(void (*)())); \
+        (void (**)(void)) realloc(__zng_function_array,                        \
+                                  __zng_function_array_size *                  \
+                                    sizeof(void (*)(void)));                   \
     __zng_section_names =                                                      \
-        (char **) realloc(__zng_section_names,                                 \
+        (const char **) realloc(__zng_section_names,                           \
                           __zng_function_array_size * sizeof(char *));         \
     __zng_test_names =                                                         \
-        (char **) realloc(__zng_test_names,                                    \
+        (const char **) realloc(__zng_test_names,                              \
                           __zng_function_array_size * sizeof(char *));         \
     __zng_function_array[__zng_function_array_size - 1] =                      \
         test_##__ZNG_SECTION##_##__ZNG_TEST;                                   \
@@ -50,11 +51,11 @@ static int __zng_function_array_size = 0;
     __zng_test_names[__zng_function_array_size - 1] =                          \
         #__ZNG_TEST;                                                           \
   }                                                                            \
-  static void test_##__ZNG_SECTION##_##__ZNG_TEST()
+  static void test_##__ZNG_SECTION##_##__ZNG_TEST(void)
 
 #define RUN_TESTS(__ZNG_FILENAME)                               \
 do {                                                            \
-  for (int i = 0; i < __zng_function_array_size; i++) {         \
+  for (size_t i = 0; i < __zng_function_array_size; i++) {      \
     __zng_function_array[i]();                                  \
     if (!__zng_keep_testing) {                                  \
       STDERR_RED("["                                            \
@@ -67,7 +68,7 @@ do {                                                            \
   if (__zng_keep_testing) {                                     \
       STDOUT_GREEN("["                                          \
                    #__ZNG_FILENAME                              \
-                   "]: %d test%s passed.\n",                    \
+                   "]: %lu test%s passed.\n",                   \
                    __zng_function_array_size,                   \
                   (__zng_function_array_size == 1 ? "" : "s")); \
   }                                                             \

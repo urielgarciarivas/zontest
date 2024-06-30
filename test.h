@@ -28,29 +28,29 @@ static const char** __zng_section_names = NULL;
 static const char** __zng_test_names = NULL;
 static size_t __zng_function_array_size = 0;
 
-#define TEST(__ZNG_SECTION, __ZNG_TEST)                                        \
-  static void test_##__ZNG_SECTION##_##__ZNG_TEST(void);                       \
-  __attribute__((constructor))                                                 \
-  static void                                                                  \
-  test_##__ZNG_SECTION##_##__ZNG_TEST##_initialize(void) {                     \
-    __zng_function_array_size++;                                               \
-    __zng_function_array =                                                     \
-        (void (**)(void)) realloc(__zng_function_array,                        \
-                                  __zng_function_array_size *                  \
-                                    sizeof(void (*)(void)));                   \
-    __zng_section_names =                                                      \
-        (const char **) realloc(__zng_section_names,                           \
-                          __zng_function_array_size * sizeof(char *));         \
-    __zng_test_names =                                                         \
-        (const char **) realloc(__zng_test_names,                              \
-                          __zng_function_array_size * sizeof(char *));         \
-    __zng_function_array[__zng_function_array_size - 1] =                      \
-        test_##__ZNG_SECTION##_##__ZNG_TEST;                                   \
-    __zng_section_names[__zng_function_array_size - 1] =                       \
-        #__ZNG_SECTION;                                                        \
-    __zng_test_names[__zng_function_array_size - 1] =                          \
-        #__ZNG_TEST;                                                           \
-  }                                                                            \
+#define TEST(__ZNG_SECTION, __ZNG_TEST)                                \
+  static void test_##__ZNG_SECTION##_##__ZNG_TEST(void);               \
+  __attribute__((constructor))                                         \
+  static void                                                          \
+  test_##__ZNG_SECTION##_##__ZNG_TEST##_initialize(void) {             \
+    __zng_function_array_size++;                                       \
+    __zng_function_array =                                             \
+        (void (**)(void)) realloc(__zng_function_array,                \
+                                  __zng_function_array_size *          \
+                                    sizeof(void (*)(void)));           \
+    __zng_section_names =                                              \
+        (const char **) realloc(__zng_section_names,                   \
+                          __zng_function_array_size * sizeof(char *)); \
+    __zng_test_names =                                                 \
+        (const char **) realloc(__zng_test_names,                      \
+                          __zng_function_array_size * sizeof(char *)); \
+    __zng_function_array[__zng_function_array_size - 1] =              \
+        test_##__ZNG_SECTION##_##__ZNG_TEST;                           \
+    __zng_section_names[__zng_function_array_size - 1] =               \
+        #__ZNG_SECTION;                                                \
+    __zng_test_names[__zng_function_array_size - 1] =                  \
+        #__ZNG_TEST;                                                   \
+  }                                                                    \
   static void test_##__ZNG_SECTION##_##__ZNG_TEST(void)
 
 #define RUN_TESTS(__ZNG_FILENAME)                               \

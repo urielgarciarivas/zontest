@@ -58,7 +58,7 @@ do {                                                            \
   for (size_t i = 0; i < __zng_function_array_size; i++) {      \
     __zng_function_array[i]();                                  \
     if (!__zng_keep_testing) {                                  \
-      STDERR_RED("["                                            \
+      STDERR_RED("\u2718 ["                                     \
                  #__ZNG_FILENAME                                \
                  "][%s][%s]: Failed.\n",                        \
                  __zng_section_names[i], __zng_test_names[i]);  \
@@ -66,7 +66,7 @@ do {                                                            \
     }                                                           \
   }                                                             \
   if (__zng_keep_testing) {                                     \
-      STDOUT_GREEN("["                                          \
+      STDOUT_GREEN("\u2714 ["                                   \
                    #__ZNG_FILENAME                              \
                    "]: %lu test%s passed.\n",                   \
                    __zng_function_array_size,                   \
@@ -75,7 +75,7 @@ do {                                                            \
   /* There is no need to deallocate each individual element */  \
   /* in the following arrays. Function pointers are static */   \
   /* and do not require deallocation. The string arrays */      \
-  /* store string literals only which do not require */         \
+  /* only store string literals which do not require */         \
   /* deallocation either. */                                    \
   if (__zng_function_array != NULL) {                           \
     free(__zng_function_array);                                 \

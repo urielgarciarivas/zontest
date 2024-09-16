@@ -27,11 +27,11 @@ static bool __zng_keep_testing = true;
 static int __zng_test_result_ = 0;
 #define TEST_RESULT() __zng_test_result_
 
-#define FAIL(__ZNG_FAIL_MESSAGE)              \
-do {                                          \
-  STDERR_RED("  %s\n", (__ZNG_FAIL_MESSAGE)); \
-  __zng_test_result_ = 1;                     \
-  __zng_keep_testing = false;                 \
+#define FAIL(__ZNG_FAIL_MESSAGE)                     \
+do {                                                 \
+  STDERR_RED("  \u2717 %s\n", (__ZNG_FAIL_MESSAGE)); \
+  __zng_test_result_ = 1;                            \
+  __zng_keep_testing = false;                        \
 } while (0)
 
 #endif // __ZNG_RESULTS_H__
